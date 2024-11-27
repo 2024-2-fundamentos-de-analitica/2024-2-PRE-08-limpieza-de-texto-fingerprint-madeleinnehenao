@@ -1,4 +1,4 @@
-"""Taller Evaluable en clase"""
+"""Taller evaluable presencial"""
 
 import nltk  # type: ignore
 import pandas as pd  # type: ignore
@@ -24,11 +24,11 @@ def create_key(df):
     df["key"] = df["key"].str.strip()
 
     # Convierta el texto a minúsculas
-    df["key"] = df["key"].str.lower()
+    df["key"] = df["key"].str.lower() 
 
     # Transforme palabras que pueden (o no) contener guiones por su
     # version sin guion.
-    df["key"] = df["key"].str.replace("-", "")
+    df["key"] = df["key"].str.replace("-", "")    
 
     # Remueva puntuación y caracteres de control
     df["key"] = df["key"].str.translate(
@@ -46,7 +46,7 @@ def create_key(df):
     df["key"] = df["key"].apply(lambda x: sorted(set(x)))
 
     # Convierta la lista de tokens a una cadena de texto separada por espacios
-    df["key"] = df["key"].str.join(" ")
+    df["key"] = df["key"].str.join(" ") 
 
     return df
 
@@ -55,20 +55,20 @@ def generate_cleaned_column(df):
     """Crea la columna 'cleaned' en el DataFrame"""
 
     df = df.copy()
-    # df_orig = df.copy()
+    #df_orig = df.copy()
 
     # Ordene el dataframe por 'key' y 'text'
-    df = df.sort_values(by=["key", "text"], ascending=[True, True])
+    df = df.sort_values(by=["key", "text"], ascending=[True, True])    
 
     # Seleccione la primera fila de cada grupo de 'key'
     keys = df.drop_duplicates(subset="key", keep="first")
 
     # Cree un diccionario con 'key' como clave y 'text' como valor
     # [(adhoc queri, AD-HOC QUERIES), (agricultur product, AGRICULTURAL PRODUCTION), ... ]
-    key_dict = dict(zip(keys["key"], keys["text"]))
+    key_dict = dict(zip(keys["key"], keys["text"]))    
 
     # Cree la columna 'cleaned' usando el diccionario
-    # df_orig["cleaned"] = df_orig["key"].map(key_dict)
+    #df_orig["cleaned"] = df_orig["key"].map(key_dict)
     df["cleaned"] = df["key"].map(key_dict)
 
     return df
@@ -94,6 +94,8 @@ def main(input_file, output_file):
     df = generate_cleaned_column(df)
     df.to_csv("files/test.csv", index=False)
     save_data(df, output_file)
+
+
 
 
 if __name__ == "__main__":
